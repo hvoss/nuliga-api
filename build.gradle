@@ -2,7 +2,7 @@ group 'de.hvoss'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.2.10'
+    ext.kotlin_version = '1.2.20'
     repositories {
         mavenCentral()
     }
@@ -34,10 +34,11 @@ repositories {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
     compile("org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE")
-    testCompile group: 'junit', name: 'junit', version: '4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'redis.clients:jedis:2.9.0'
     compile 'org.springframework.data:spring-data-redis:2.0.3.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.mockito:mockito-core:+"
 }
 compileKotlin {

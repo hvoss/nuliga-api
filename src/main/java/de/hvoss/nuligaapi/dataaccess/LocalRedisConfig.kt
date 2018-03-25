@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate
 import java.net.URI
 
 @Configuration
-class LocalRedisConfig {
+open class LocalRedisConfig {
 
     @Bean
     fun jedisConnectionFactory(): JedisConnectionFactory {
