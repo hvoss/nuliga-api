@@ -1,4 +1,4 @@
-package de.hvoss.nuligaapi.dataaccess
+package de.hvoss.nuligaapi.nuliga.client
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -33,10 +33,10 @@ class NuLigaAccessImpl(nuLigaDAO: NuLigaDAO) : NuLigaAccess {
         val date = LocalDateTime.parse(cells[cellNo++] + " " + cells[cellNo++], DF);
 
         return NuLigaLine(
-                date =  date,
+                date = date,
                 hallId = convertInt(cells[cellNo++]),
                 hallTooltip = cells[cellNo++],
-                matchNo =  convertInt(cells[cellNo++]),
+                matchNo = convertInt(cells[cellNo++]),
                 league = cells[cellNo++],
                 seasonName = cells[cellNo++],
                 homeTeamName = cells[cellNo++],

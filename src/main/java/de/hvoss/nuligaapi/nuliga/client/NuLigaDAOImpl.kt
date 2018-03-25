@@ -1,4 +1,4 @@
-package de.hvoss.nuligaapi.dataaccess
+package de.hvoss.nuligaapi.nuliga.client
 
 import org.springframework.stereotype.Component
 
