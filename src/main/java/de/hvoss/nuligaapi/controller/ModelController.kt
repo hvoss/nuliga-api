@@ -3,34 +3,36 @@ package de.hvoss.nuligaapi.controller;
 import de.hvoss.nuligaapi.dataaccess.ClubRepository
 import de.hvoss.nuligaapi.nuliga.client.NuLigaAccess
 import de.hvoss.nuligaapi.model.Club
-import de.hvoss.nuligaapi.service.ClubController
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
 import java.util.*
+import org.springframework.scheduling.annotation.Scheduled
 import java.util.stream.Collectors
-import java.net.URI
-import redis.clients.jedis.JedisPool
-import redis.clients.jedis.JedisPoolConfig
 
 
+@Component
+class ModelController(private val nuLigaAccess: NuLigaAccess, private val clubRepository: ClubRepository) {
 
+    private val log = LoggerFactory.getLogger(ModelController::class.java)
 
-
-class ModelController(nuLigaAccess : NuLigaAccess, clubRepository: ClubRepository) {
-
-    val nuLigaAccess = nuLigaAccess
-
-    val clubRepository = clubRepository
-
-    fun buildModel() {
+    @Scheduled(cron = "0 * * * * *")
+    fun updateData() {
+        log.info("before load")
         val matches = nuLigaAccess.readRegionMeetingsFOP("HVN+2016%2F17")
+        log.info("after load")
 
+        log.info("before filter")
         val clubs = matches.stream().flatMap { l -> Arrays.asList(l.firstReferee, l.secondReferee, l.thirdReferee, l.fourthReferee).stream() }
                 .filter { r -> r != null }
+                .filter {c -> c!!.clubName != null && c!!.clubName.isNotEmpty() }
                 .map { r -> Club(name = r!!.clubName) }
-                .forEach{c -> clubRepository.save(c)}
+                .distinct()
+                .collect(Collectors.toList())
+        log.info("after filter")
 
-
-
-        System.out.print(clubs)
+        log.info("before save")
+        clubRepository.saveAll(clubs)
+        log.info("after save")
     }
 
 }

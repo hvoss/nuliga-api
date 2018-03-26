@@ -27,8 +27,5 @@ class ModelControllerTest {
         sut = ModelController(clubRepository = clubRepository, nuLigaAccess = nuLigaAccess)
     }
 
-    @Test
-    fun buildModel() {
-        sut.buildModel()
-    }
+
 }

@@ -1,11 +1,13 @@
 package de.hvoss.nuligaapi.model
 
+import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import java.io.Serializable
 import java.time.LocalDateTime
 
 @RedisHash("Club")
 data class Club (
+        @Id
         val name: String
 ) : Serializable
 

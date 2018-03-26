@@ -1,12 +1,13 @@
 package de.hvoss.nuligaapi.nuliga.client
 
+import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
-class NuLigaAccessImpl(nuLigaDAO: NuLigaDAO) : NuLigaAccess {
-    val nuLigaDAO = nuLigaDAO
+@Component
+class NuLigaAccessImpl(private val nuLigaDAO: NuLigaDAO) : NuLigaAccess {
 
     val DF = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
 
@@ -23,6 +24,7 @@ class NuLigaAccessImpl(nuLigaDAO: NuLigaDAO) : NuLigaAccess {
                    .collect(Collectors.toList())
     }
 
+    @Suppress("UNUSED_CHANGED_VALUE")
     private fun convert(line: String): NuLigaLine {
         val cells = line.split(";")
 
@@ -60,7 +62,7 @@ class NuLigaAccessImpl(nuLigaDAO: NuLigaDAO) : NuLigaAccess {
     }
 
     private fun convertInt(str : String) : Int? {
-        if (str == null || str.isBlank()) {
+        if (str.isBlank()) {
             return null
         }
         return str.toInt()

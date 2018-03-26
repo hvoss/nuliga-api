@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT -jar build/libs/nuliga-api-1.0-SNAPSHOT.jar de.hvoss.nuligaapi.WebApplicationMainKt
