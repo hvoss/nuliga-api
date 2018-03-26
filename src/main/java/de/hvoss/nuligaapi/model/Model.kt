@@ -12,7 +12,9 @@ data class Club (
 ) : Serializable
 
 @RedisHash("Referee")
-data class Referee (
+data class Referee
+(
+        @Id
         val name : String,
         val club : Club
 ) : Serializable
