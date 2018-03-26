@@ -31,7 +31,7 @@ class ModelController(private val nuLigaAccess: NuLigaAccess, private val clubRe
         log.info("after filter")
 
         log.info("before save")
-        clubRepository.saveAll(clubs)
+        clubRepository.save(clubs)
         log.info("after save")
     }
 

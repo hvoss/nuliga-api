@@ -1,15 +1,12 @@
-package de.hvoss.nuligaapi.dataaccess
+package de.hvoss.nuligaapi.config
 
 import de.hvoss.nuligaapi.util.retrieveUriFromEnc
+import org.springframework.boot.autoconfigure.session.SessionProperties
 import redis.clients.jedis.JedisPoolConfig
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.redis.connection.RedisPassword
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration
-import org.springframework.data.redis.connection.jedis.JedisClientConfiguration
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
-import java.net.URI
 
 @Configuration
 open class RedisConfiguration {
@@ -25,15 +22,21 @@ open class RedisConfiguration {
 
         val uri = retrieveUriFromEnc("REDIS_URL")
 
-        val standaloneConfig = RedisStandaloneConfiguration(uri.host, uri.port)
-        standaloneConfig.password = RedisPassword.of(uri.userInfo.split(":")[1])
+//        Spring Boot 2
+//        val standaloneConfig = RedisStandaloneConfiguration(uri.host, uri.port)
+//        standaloneConfig.password = RedisPassword.of(uri.userInfo.split(":")[1])
+//
+//        val clientConfig = JedisClientConfiguration.builder()
+//                                                                       .usePooling()
+//                                                                       .poolConfig(poolConfig)
+//                                                                       .build();
 
-        val clientConfig = JedisClientConfiguration.builder()
-                                                                       .usePooling()
-                                                                       .poolConfig(poolConfig)
-                                                                       .build();
-
-        return JedisConnectionFactory(standaloneConfig, clientConfig)
+        val factory = JedisConnectionFactory()
+        factory.hostName = uri.host
+        factory.port = uri.port
+        factory.password = uri.userInfo.split(":")[1]
+        factory.poolConfig = poolConfig
+        return factory
     }
 
     @Bean
