@@ -5,6 +5,8 @@ import de.hvoss.nuligaapi.dataaccess.RefereeRepository
 import de.hvoss.nuligaapi.nuliga.client.NuLigaAccess
 import de.hvoss.nuligaapi.model.Club
 import de.hvoss.nuligaapi.model.Referee
+import de.hvoss.nuligaapi.model.Team
+import de.hvoss.nuligaapi.nuliga.client.NuLigaLine
 import de.hvoss.nuligaapi.nuliga.client.NuLigaLineReferee
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -22,34 +24,38 @@ class ModelController(private val nuLigaAccess: NuLigaAccess, private val clubRe
 
     @Scheduled(cron = "0 * * * * *")
     fun updateData() {
-        log.info("before load")
         val matches = nuLigaAccess.readRegionMeetingsFOP("HVN+2016%2F17")
-        log.info("after load")
 
-        log.info("before filter")
-        val clubs = matches.stream().flatMap { l -> Arrays.asList(l.firstReferee, l.secondReferee, l.thirdReferee, l.fourthReferee).stream() }
-                .filter { r -> r != null }
-                .filter {c -> c!!.clubName != null && c!!.clubName.isNotEmpty() }
-                .map { r -> Club(name = r!!.clubName) }
-                .distinct()
-                .collect(Collectors.toList())
-        log.info("after filter")
+//        clubRepository.save(extractClubs(matches))
+//        refereeRepository.save(extractReferees(matches))
 
-        log.info("before save")
-        clubRepository.save(clubs)
-        log.info("after save")
-
-
-        val referees = matches.stream().flatMap { l -> Arrays.asList(l.firstReferee, l.secondReferee, l.thirdReferee, l.fourthReferee).stream() }
+    }
+/*
+    private fun extractReferees(lines: List<NuLigaLine>): List<Referee> {
+        return lines.stream().flatMap { l -> listOfNotNull(l.firstReferee, l.secondReferee, l.thirdReferee, l.fourthReferee).stream() }
                 .distinct()
                 .map { r -> toReferee(r) }
                 .collect(Collectors.toList())
                 .filterNotNull()
-
-
-        refereeRepository.save(referees)
     }
 
+    private fun extractClubs(lines: List<NuLigaLine>): List<Club> {
+        return lines.stream().flatMap { l -> listOfNotNull(l.firstReferee?.clubName, l.secondReferee?.clubName, l.thirdReferee?.clubName, l.fourthReferee?.clubName).stream() }
+                .distinct()
+                .map { name -> Club(name = name) }
+                .collect(Collectors.toList())
+                .filterNotNull()
+    }
+
+    private fun extractTeams(lines: List<NuLigaLine>): List<Team> {
+        return lines.stream().flatMap { l -> listOfNotNull(l.homeTeamName, l.guestTeamName).stream() }
+                .distinct()
+                .map { teamName -> Team(Club("a"), teamName) }
+                .collect(Collectors.toList())
+                .filterNotNull()
+
+    }
+*/
     private fun toReferee(nuReferee :  NuLigaLineReferee?) : Referee? {
         if (nuReferee != null) {
             val club = clubRepository.findOne(nuReferee.clubName)

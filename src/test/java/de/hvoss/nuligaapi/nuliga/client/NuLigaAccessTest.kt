@@ -13,4 +13,14 @@ class NuLigaAccessTest {
         val readRegionMeetingsFOP = access.readRegionMeetingsFOP("HVN+2016%2F17")
         System.out.print(readRegionMeetingsFOP)
     }
+
+    @Test
+    fun readClubs() {
+        val dao = NuLigaDAOImpl()
+        val access = NuLigaAccessImpl(dao)
+        val clubs = access.readClubs()
+        System.out.print(clubs)
+    }
+
+
 }

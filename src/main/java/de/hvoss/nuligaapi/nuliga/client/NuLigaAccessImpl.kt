@@ -1,5 +1,6 @@
 package de.hvoss.nuligaapi.nuliga.client
 
+import de.hvoss.nuligaapi.model.Club
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -9,12 +10,16 @@ import java.util.stream.Collectors
 @Component
 class NuLigaAccessImpl(private val nuLigaDAO: NuLigaDAO) : NuLigaAccess {
 
+
     val DF = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
 
     val SCORE_PATTERN = Pattern.compile("^=\"(\\d+):(\\d+)\"$")
 
+
+    private val matcherClubOld = Pattern.compile("<tr>\\s*<td>\\s*.*?clubInfoDisplay\\?club=(\\d+)\">(.+?)<.*?\\((\\d+)", Pattern.DOTALL)
+
     override fun readRegionMeetingsFOP(championship: String): List<NuLigaLine> {
-        val data = nuLigaDAO.loadRegionMeetingsFOP(championship)
+        val data = nuLigaDAO.loadCSV(championship)
 
         return data.split("\n")
                    .stream()
@@ -73,6 +78,18 @@ class NuLigaAccessImpl(private val nuLigaDAO: NuLigaDAO) : NuLigaAccess {
             return NuLigaLineReferee(name.trim(), clubName.trim())
         }
         return null
+    }
+
+    override fun readClubs() : List<Club> {
+        return nuLigaDAO.loadClubSearch().map(this::toClub).collect(Collectors.toList()).filterNotNull()
+    }
+
+    private fun toClub(line : String) : Club {
+        val matcher = matcherClubOld.matcher(line)
+        if (matcher.find()) {
+            return Club(matcher.group(1).toInt(), matcher.group(3).toInt(), matcher.group(2))
+        }
+        throw IllegalArgumentException("not match: $line")
     }
 
 }

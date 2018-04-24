@@ -8,6 +8,10 @@ import java.time.LocalDateTime
 @RedisHash("Club")
 data class Club (
         @Id
+        val technicalId : Int,
+
+        val publicId : Int,
+
         val name: String
 ) : Serializable
 
@@ -15,8 +19,8 @@ data class Club (
 data class Referee
 (
         @Id
-        val name : String,
-        val club : Club
+        var name : String,
+        var club : Club
 ) : Serializable
 
 @RedisHash("Team")
