@@ -10,5 +10,11 @@ interface NuLigaDAO {
 
     fun loadCSV(championship : String) : String
 
-    fun loadClubSearch() : Stream<String>
+    fun loadClubSearch() : Stream<Club>
+
+    data class Club (
+         var publicId : Int,
+         var internalId : Int,
+         var name : String
+         )
 }

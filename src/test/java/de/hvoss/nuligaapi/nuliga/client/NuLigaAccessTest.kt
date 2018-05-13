@@ -1,5 +1,6 @@
 package de.hvoss.nuligaapi.nuliga.client
 
+import org.apache.http.impl.client.HttpClientBuilder
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -16,7 +17,7 @@ class NuLigaAccessTest {
 
     @Test
     fun readClubs() {
-        val dao = NuLigaDAOImpl()
+        val dao = NuLigaDAOImpl(HttpClientBuilder.create().build())
         val access = NuLigaAccessImpl(dao)
         val clubs = access.readClubs()
         System.out.print(clubs)

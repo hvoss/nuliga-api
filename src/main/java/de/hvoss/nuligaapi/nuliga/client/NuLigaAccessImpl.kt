@@ -15,9 +15,6 @@ class NuLigaAccessImpl(private val nuLigaDAO: NuLigaDAO) : NuLigaAccess {
 
     val SCORE_PATTERN = Pattern.compile("^=\"(\\d+):(\\d+)\"$")
 
-
-    private val matcherClubOld = Pattern.compile("<tr>\\s*<td>\\s*.*?clubInfoDisplay\\?club=(\\d+)\">(.+?)<.*?\\((\\d+)", Pattern.DOTALL)
-
     override fun readRegionMeetingsFOP(championship: String): List<NuLigaLine> {
         val data = nuLigaDAO.loadCSV(championship)
 
@@ -84,12 +81,8 @@ class NuLigaAccessImpl(private val nuLigaDAO: NuLigaDAO) : NuLigaAccess {
         return nuLigaDAO.loadClubSearch().map(this::toClub).collect(Collectors.toList()).filterNotNull()
     }
 
-    private fun toClub(line : String) : Club {
-        val matcher = matcherClubOld.matcher(line)
-        if (matcher.find()) {
-            return Club(matcher.group(1).toInt(), matcher.group(3).toInt(), matcher.group(2))
-        }
-        throw IllegalArgumentException("not match: $line")
+    private fun toClub(line : NuLigaDAO.Club) : Club {
+        return Club(line.internalId, line.publicId, line.name)
     }
 
 }

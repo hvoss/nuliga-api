@@ -5,7 +5,7 @@ import java.nio.file.Paths
 import java.util.stream.Stream
 
 class NuLigaTestDAO : NuLigaDAO {
-    override fun loadClubSearch(): Stream<String> {
+    override fun loadClubSearch(): Stream<NuLigaDAO.Club> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
