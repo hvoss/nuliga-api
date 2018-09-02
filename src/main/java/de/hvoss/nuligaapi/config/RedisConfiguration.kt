@@ -1,7 +1,6 @@
 package de.hvoss.nuligaapi.config
 
 import de.hvoss.nuligaapi.util.retrieveUriFromEnc
-import org.springframework.boot.autoconfigure.session.SessionProperties
 import redis.clients.jedis.JedisPoolConfig
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -34,7 +33,9 @@ open class RedisConfiguration {
         val factory = JedisConnectionFactory()
         factory.hostName = uri.host
         factory.port = uri.port
-        factory.password = uri.userInfo.split(":")[1]
+        if (uri.userInfo != null) {
+            factory.password = uri.userInfo.split(":")[1]
+        }
         factory.poolConfig = poolConfig
         return factory
     }

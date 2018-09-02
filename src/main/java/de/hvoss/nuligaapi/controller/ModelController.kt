@@ -12,19 +12,27 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.*
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
 import java.sql.Ref
 import java.util.stream.Collector
 import java.util.stream.Collectors
 
 
+@RestController
 @Component
 class ModelController(private val nuLigaAccess: NuLigaAccess, private val clubRepository: ClubRepository, private val refereeRepository: RefereeRepository) {
 
     private val log = LoggerFactory.getLogger(ModelController::class.java)
 
+    @GetMapping("update")
     @Scheduled(cron = "0 * * * * *")
     fun updateData() {
-        val matches = nuLigaAccess.readRegionMeetingsFOP("HVN+2016%2F17")
+        //val matches = nuLigaAccess.readRegionMeetingsFOP("HVN+2016%2F17")
+
+        val clubs = nuLigaAccess.readClubs();
+
+        clubRepository.save(clubs);
 
 //        clubRepository.save(extractClubs(matches))
 //        refereeRepository.save(extractReferees(matches))

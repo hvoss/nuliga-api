@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class SpringConfig {
+open class SpringConfig {
 
     @Bean
-    fun httpClient() : CloseableHttpClient {
+    open fun httpClient() : CloseableHttpClient {
         val timeoutInSeconds = 30;
         val httpConfig = RequestConfig.custom()
                 .setConnectTimeout(timeoutInSeconds * 1000)
