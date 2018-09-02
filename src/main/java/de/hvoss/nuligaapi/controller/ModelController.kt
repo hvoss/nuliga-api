@@ -32,6 +32,7 @@ class ModelController(private val nuLigaAccess: NuLigaAccess, private val clubRe
 
         val clubs = nuLigaAccess.readClubs();
 
+        clubRepository.deleteAll()
         clubRepository.save(clubs);
 
 //        clubRepository.save(extractClubs(matches))
