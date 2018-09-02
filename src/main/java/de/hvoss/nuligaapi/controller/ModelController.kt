@@ -8,6 +8,7 @@ import de.hvoss.nuligaapi.model.Referee
 import de.hvoss.nuligaapi.model.Team
 import de.hvoss.nuligaapi.nuliga.client.NuLigaLine
 import de.hvoss.nuligaapi.nuliga.client.NuLigaLineReferee
+import groovy.util.logging.Slf4j
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.*
@@ -21,6 +22,7 @@ import java.util.stream.Collectors
 
 @RestController
 @Component
+@Slf4j
 class ModelController(private val nuLigaAccess: NuLigaAccess, private val clubRepository: ClubRepository, private val refereeRepository: RefereeRepository) {
 
     private val log = LoggerFactory.getLogger(ModelController::class.java)
@@ -30,10 +32,12 @@ class ModelController(private val nuLigaAccess: NuLigaAccess, private val clubRe
     fun updateData() {
         //val matches = nuLigaAccess.readRegionMeetingsFOP("HVN+2016%2F17")
 
-        val clubs = nuLigaAccess.readClubs();
-
         clubRepository.deleteAll()
-        clubRepository.save(clubs);
+        nuLigaAccess.readClubs().forEach { c ->
+            log.info("Save Club {}", c);
+            clubRepository.save(c)
+        };
+
 
 //        clubRepository.save(extractClubs(matches))
 //        refereeRepository.save(extractReferees(matches))

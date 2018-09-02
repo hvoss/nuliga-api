@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 import java.util.stream.Collectors
+import java.util.stream.Stream
 
 @Component
 class NuLigaAccessImpl(private val nuLigaDAO: NuLigaDAO) : NuLigaAccess {
@@ -77,8 +78,8 @@ class NuLigaAccessImpl(private val nuLigaDAO: NuLigaDAO) : NuLigaAccess {
         return null
     }
 
-    override fun readClubs() : List<Club> {
-        return nuLigaDAO.loadClubSearch().map(this::toClub).collect(Collectors.toList()).filterNotNull()
+    override fun readClubs() : Stream<Club> {
+        return nuLigaDAO.loadClubSearch().map(this::toClub);
     }
 
     private fun toClub(line : NuLigaDAO.Club) : Club {
